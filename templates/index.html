@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finaceiro</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Controle Finaceiro</title>
 </head>
 <body>
+    <div class="container">
+
+    
     <h1>Meu Controle Financeiro</h1>
 
     <h2>Saldo Atual: R$ {{ "%.2f"|format(saldo) }}</h2>
@@ -19,16 +23,25 @@
     {% else %}
         <ul>
             {% for t in transacoes %}
-                <li>
-                    {{ t['data'] }} - {{ t['descricao'] }} - 
-                    <strong>
-                        R$ {{ "%.2f"|format(t['valor']) }} ({{ t['tipo'] }})
-                    </strong>
-                </li>
+            <li class="{{ t['tipo'] }}">
+                <div>
+                    <span>{{ t['data'] }} - {{ t['descricao'] }}</span>
+                    <br>
+                    <span class="category-tag">{{ t['categoria_nome'] }}</span>
+                </div>
+                <strong>R$ {{ "%.2f"|format(t['valor']) }}</strong>
+
+                <div class="transaction-actions">
+                    <strong>R$ {{ "%.2f"|format(t['valor']) }}</strong>
+                    <form action="{{ url_for('delete_transaction', id=t['id']) }}" method="post" style="display: inline;">
+                        <button type="submit" class="delete-btn">Apagar</button>
+                    </form>
+                </div>
+            </li>
             {% endfor %}
         </ul>
     {% endif %}
-<form action="/add" method="post">
+    <form action="/add" method="post">
     <h3>Adicionar Nova Transação</h3>
     <p>
         Descrição: <input type="text" name="descricao" required>
@@ -57,6 +70,7 @@
     <p>
         <button type="submit">Salvar</button>
     </p>
+    </div>
 </form>
 </body>
 </html>

@@ -22,6 +22,12 @@ cursor.execute("""
         FOREIGN KEY (categoria_id) REFERENCES categorias(id)
     );
 """)
+sql_query = """
+    SELECT t.*, c.nome AS categoria_nome
+    FROM transacoes t JOIN categorias c ON t.categoria_id = c.id
+    ORDER BY t.data DESC
+"""
+transacoes = conn.execute(sql_query).fetchall()
 
 categorias_iniciais = [
     ('Salário',),

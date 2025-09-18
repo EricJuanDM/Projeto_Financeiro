@@ -1,0 +1,120 @@
+/* Estilos gerais para o corpo da página */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Centralizar o conteúdo principal */
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para títulos */
+h1, h2, h3 {
+    color: #2c3e50;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Estilos para o formulário */
+form {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+form p {
+    margin-bottom: 10px;
+}
+
+/* Estilos para caixas de texto, números, datas e menus dropdown */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Garante que o padding não afete a largura total */
+}
+
+/* Estilos para o botão */
+button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* Estilos para a lista de transações */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background: #f9f9f9;
+    margin-bottom: 8px;
+    padding: 12px;
+    border-radius: 4px;
+    border-left: 5px solid #3498db; /* Uma barra de cor para destaque */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Mudar a cor da barra para despesas */
+li.despesa {
+    border-left-color: #e74c3c;
+}
+/* Estilos para o container de ações (valor + botão) */
+.transaction-actions {
+    display: flex;
+    align-items: center;
+}
+
+/* Estilos para o botão de apagar */
+.delete-btn {
+    background-color: #e74c3c; /* Vermelho */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 15px; /* Espaço entre o valor e o botão */
+}
+
+.delete-btn:hover {
+    background-color: #c0392b; /* Vermelho mais escuro */
+}
+/* Estilos para a etiqueta da categoria */
+.category-tag {
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 5px;
+}

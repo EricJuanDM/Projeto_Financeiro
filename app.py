@@ -1,8 +1,9 @@
 import sqlite3
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 
 
 app = Flask(__name__)
+app.secret_key = '1234'
 
 
 def get_db_connection():
@@ -44,6 +45,14 @@ def add_transaction():
     conn.commit()
     conn.close()
 
+    return redirect('/')
+
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete_transaction(id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM transacoes WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
     return redirect('/')
 
 if __name__ == '__main__':
