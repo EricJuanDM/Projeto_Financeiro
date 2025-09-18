@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finaceiro</title>
+</head>
+<body>
+    <h1>Meu Controle Financeiro</h1>
+
+    <h2>Saldo Atual: R$ {{ "%.2f"|format(saldo) }}</h2>
+
+    <hr>
+
+    <h3>Histórico de Transações</h3>
+
+    {% if not transacoes %}
+        <p>Nenhuma transação registrada ainda.</p>
+    {% else %}
+        <ul>
+            {% for t in transacoes %}
+                <li>
+                    {{ t['data'] }} - {{ t['descricao'] }} - 
+                    <strong>
+                        R$ {{ "%.2f"|format(t['valor']) }} ({{ t['tipo'] }})
+                    </strong>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+<form action="/add" method="post">
+    <h3>Adicionar Nova Transação</h3>
+    <p>
+        Descrição: <input type="text" name="descricao" required>
+    </p>
+    <p>
+        Valor (R$): <input type="number" name="valor" step="0.01" required>
+    </p>
+    <p>
+        Data: <input type="date" name="data" required>
+    </p>
+    <p>
+        Tipo:
+        <select name="tipo">
+            <option value="receita">Receita</option>
+            <option value="despesa">Despesa</option>
+        </select>
+    </p>
+    <p>
+        Categoria:
+        <select name="categoria_id">
+            {% for cat in categorias %}
+                <option value="{{ cat['id'] }}">{{ cat['nome'] }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>
+        <button type="submit">Salvar</button>
+    </p>
+</form>
+</body>
+</html>
