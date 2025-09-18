@@ -6,6 +6,7 @@ app = Flask(__name__)
 app.secret_key = '1234'
 
 
+
 def get_db_connection():
     conn = sqlite3.connect('financeiro.db')
     conn.row_factory = sqlite3.Row
@@ -44,7 +45,7 @@ def add_transaction():
                 (descricao, valor, data, tipo, categoria_id))
     conn.commit()
     conn.close()
-
+    flash('Transação adicionada com sucesso!', 'success')
     return redirect('/')
 
 @app.route('/delete/<int:id>', methods=['POST'])
@@ -53,6 +54,7 @@ def delete_transaction(id):
     conn.execute('DELETE FROM transacoes WHERE id = ?', (id,))
     conn.commit()
     conn.close()
+    flash('Transação apagada com sucesso!', 'success')
     return redirect('/')
 
 if __name__ == '__main__':
