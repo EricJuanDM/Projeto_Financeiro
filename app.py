@@ -1,11 +1,18 @@
 import sqlite3
 from flask import Flask, render_template, request, redirect, flash
+import os
+from dotenv import load_dotenv 
+from Flask_SQLAlchemy import SQLAlchemy
 
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = '1234'
+app.secret_key = os.getenv('SECRET_KEY')
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///financeiro.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 
+db = SQLAlchemy(app)
 
 def get_db_connection():
     conn = sqlite3.connect('financeiro.db')
@@ -64,6 +71,23 @@ def edit_transaction(id):
     categorias = conn.execute('SELECT * FROM categorias ORDER BY nome').fetchall()
     conn.close()
     return render_template('edit.html', transacao=transacao, categorias=categorias)
+
+@app.route('/update/<int:id>', methods=['POST'])
+def update_transaction(id):
+    descricao = request.form['descricao']
+    valor = request.form['valor']
+    data = request.form['data']
+    tipo = request.form['tipo']
+    categoria_id = request.form['categoria_id']
+
+    conn = get_db_connection()
+    conn.execute('UPDATE transacoes SET descricao = ?, valor = ?, data = ?, tipo = ?, categoria_id = ? WHERE id = ?',
+                (descricao, valor, data, tipo, categoria_id, id))
+    conn.commit()
+    conn.close()
+
+    flash('Transação atualizada com sucesso!', 'success')
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)
