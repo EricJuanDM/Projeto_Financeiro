@@ -57,5 +57,13 @@ def delete_transaction(id):
     flash('Transação apagada com sucesso!', 'success')
     return redirect('/')
 
+@app.route('/edit/<int:id>')
+def edit_transaction(id):
+    conn = get_db_connection()
+    transacao = conn.execute('SELECT * FROM transacoes WHERE id = ?', (id,)).fetchone()
+    categorias = conn.execute('SELECT * FROM categorias ORDER BY nome').fetchall()
+    conn.close()
+    return render_template('edit.html', transacao=transacao, categorias=categorias)
+
 if __name__ == '__main__':
     app.run(debug=True)

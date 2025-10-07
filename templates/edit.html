@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Transação</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Transação</h1>
+
+        <form action="{{ url_for('update_transaction', id=transacao['id']) }}" method="post">
+            <p>
+                Descrição:
+                <!-- O atributo 'value' preenche o campo com o dado atual -->
+                <input type="text" name="descricao" value="{{ transacao['descricao'] }}" required>
+            </p>
+            <p>
+                Valor (R$):
+                <input type="number" name="valor" step="0.01" value="{{ transacao['valor'] }}" required>
+            </p>
+            <p>
+                Data:
+                <input type="date" name="data" value="{{ transacao['data'] }}" required>
+            </p>
+            <p>
+                Tipo:
+                <select name="tipo">
+                    <!-- Lógica para deixar a opção correta selecionada -->
+                    <option value="receita" {% if transacao['tipo'] == 'receita' %}selected{% endif %}>Receita</option>
+                    <option value="despesa" {% if transacao['tipo'] == 'despesa' %}selected{% endif %}>Despesa</option>
+                </select>
+            </p>
+            <p>
+                Categoria:
+                <select name="categoria_id">
+                    {% for cat in categorias %}
+                        <!-- Lógica para deixar a categoria correta selecionada -->
+                        <option value="{{ cat['id'] }}" {% if cat['id'] == transacao['categoria_id'] %}selected{% endif %}>
+                            {{ cat['nome'] }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <button type="submit">Salvar Alterações</button>
+                <!-- Link para cancelar e voltar à página inicial -->
+                <a href="{{ url_for('index') }}" style="margin-left: 10px;">Cancelar</a>
+            </p>
+        </form>
+    </div>
+</body>
+</html>

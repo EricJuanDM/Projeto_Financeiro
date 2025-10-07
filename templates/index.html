@@ -2,84 +2,86 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-    <title>Controle Finaceiro</title>
+    <title>Controle Financeiro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
+        <!-- Bloco para exibir as mensagens flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">
-        {{ message }}
-        </div>
-        {% endfor %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
         {% endif %}
-    {% endwith %}
-    
-    <h1>Meu Controle Financeiro</h1>
-    
+        {% endwith %}
 
-    <h2>Saldo Atual: R$ {{ "%.2f"|format(saldo) }}</h2>
+        <h1>Meu Controle Financeiro</h1>
 
-    <hr>
+        <h2>Saldo Atual: R$ {{ "%.2f"|format(saldo) }}</h2>
 
-    <h3>Histórico de Transações</h3>
+        <form action="/add" method="post">
+            <h3>Adicionar Nova Transação</h3>
+            <p>
+                Descrição: <input type="text" name="descricao" required>
+            </p>
+            <p>
+                Valor (R$): <input type="number" name="valor" step="0.01" required>
+            </p>
+            <p>
+                Data: <input type="date" name="data" required>
+            </p>
+            <p>
+                Tipo:
+                <select name="tipo">
+                    <option value="receita">Receita</option>
+                    <option value="despesa">Despesa</option>
+                </select>
+            </p>
+            <p>
+                Categoria:
+                <select name="categoria_id">
+                    {% for cat in categorias %}
+                        <option value="{{ cat['id'] }}">{{ cat['nome'] }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <button type="submit">Salvar</button>
+            </p>
+        </form>
 
-    {% if not transacoes %}
-        <p>Nenhuma transação registrada ainda.</p>
-    {% else %}
-        <ul>
-            {% for t in transacoes %}
-            <li class="{{ t['tipo'] }}">
-                <div>
-                    <span>{{ t['data'] }} - {{ t['descricao'] }}</span>
-                    <br>
-                    <span class="category-tag">{{ t['categoria_nome'] }}</span>
-                </div>
-                <strong>R$ {{ "%.2f"|format(t['valor']) }}</strong>
+        <hr>
 
-                <div class="transaction-actions">
-                    <strong>R$ {{ "%.2f"|format(t['valor']) }}</strong>
-                    <form action="{{ url_for('delete_transaction', id=t['id']) }}" method="post" style="display: inline;">
-                        <button type="submit" class="delete-btn">Apagar</button>
-                    </form>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    <form action="/add" method="post">
-    <h3>Adicionar Nova Transação</h3>
-    <p>
-        Descrição: <input type="text" name="descricao" required>
-    </p>
-    <p>
-        Valor (R$): <input type="number" name="valor" step="0.01" required>
-    </p>
-    <p>
-        Data: <input type="date" name="data" required>
-    </p>
-    <p>
-        Tipo:
-        <select name="tipo">
-            <option value="receita">Receita</option>
-            <option value="despesa">Despesa</option>
-        </select>
-    </p>
-    <p>
-        Categoria:
-        <select name="categoria_id">
-            {% for cat in categorias %}
-                <option value="{{ cat['id'] }}">{{ cat['nome'] }}</option>
-            {% endfor %}
-        </select>
-    </p>
-    <p>
-        <button type="submit">Salvar</button>
-    </p>
+        <h3>Histórico de Transações</h3>
+
+        {% if not transacoes %}
+            <p>Nenhuma transação registrada ainda.</p>
+        {% else %}
+            <ul>
+                {% for t in transacoes %}
+                    <li class="{{ t['tipo'] }}">
+                        <div>
+                            <span>{{ t['data'] }} - {{ t['descricao'] }}</span>
+                            <br>
+                            <span class="category-tag">{{ t['categoria_nome'] }}</span>
+                        </div>
+
+                        <div class="transaction-actions">
+                            <strong>R$ {{ "%.2f"|format(t['valor']) }}</strong>
+
+                            <a href="{{ url_for('edit_transaction', id=t['id']) }}" class="edit-btn">Editar</a>
+
+                            <form action="{{ url_for('delete_transaction', id=t['id']) }}" method="post" style="display: inline;">
+                                <button type="submit" class="delete-btn">Apagar</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
-</form>
 </body>
 </html>
