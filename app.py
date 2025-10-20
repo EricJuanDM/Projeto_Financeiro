@@ -2,7 +2,7 @@ import sqlite3
 from flask import Flask, render_template, request, redirect, flash
 import os
 from dotenv import load_dotenv 
-from Flask_SQLAlchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
 
@@ -13,6 +13,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///financeiro.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 
 db = SQLAlchemy(app)
+
+class Categoria(db.Model):
+    id = db.Column(db.Interger, primary_key = True)
+    nome = db.Column(db.String(100), unique=True, nullable=False)
+    
+    transacoes = db.relationship('Transacao', backref='categoria', lazy=True)
+
+class Transacao(db.Model):
+    id = db.Column(db.Intergrer, primary_key=True)
+    descricao = db.Column(db.String(200))
 
 def get_db_connection():
     conn = sqlite3.connect('financeiro.db')
